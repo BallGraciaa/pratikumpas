@@ -5,19 +5,77 @@
  */
 package form;
 
+import Lib.koneksi;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Vector;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Administrator
  */
 public class petugas extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form petugas
-     */
+    static void setUsername(String string) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    static void setusername(String string) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    static void setpassword(String string) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    static void setnama_petugas(String string) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    static void setlevel(String string) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+ 
+void kosong(){
+    id.setText("");
+    username.setText("");
+    password.setText("");
+    petugas.setText("");
+    level.setSelectedItem("");
+    }
+    
     public petugas() {
         initComponents();
     }
 
+private void muatTabel(){
+    DefaultTableModel model = (DefaultTableModel) tabel.getModel();
+    model.getDataVector().removeAllElements();
+    String sql = "select * from petugas"; 
+        koneksi konek = new koneksi();
+        ResultSet rs = konek.ambilData(sql);    
+        try {
+            while(rs.next()){
+              Vector baris = new Vector();
+              baris.add(rs.getInt("id_petugas"));
+              baris.add(rs.getString("username"));
+              baris.add(rs.getString("password"));
+              baris.add(rs.getString("nama_petugas"));
+              baris.add(rs.getString("level"));
+              model.addRow(baris);
+            } 
+        } catch (SQLException e) {
+            
+        }
+    
+        
+    }
+    
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -55,6 +113,12 @@ public class petugas extends javax.swing.JInternalFrame {
         jLabel2.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel2.setText("id petugas");
 
+        id.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                idActionPerformed(evt);
+            }
+        });
+
         jLabel3.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel3.setText("username");
 
@@ -65,6 +129,11 @@ public class petugas extends javax.swing.JInternalFrame {
         jLabel5.setText("SPP");
 
         simpan.setText("simpan");
+        simpan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                simpanMouseClicked(evt);
+            }
+        });
 
         hapus.setText("hapus");
         hapus.addActionListener(new java.awt.event.ActionListener() {
@@ -211,6 +280,29 @@ public class petugas extends javax.swing.JInternalFrame {
     private void hapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hapusActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_hapusActionPerformed
+
+    private void idActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_idActionPerformed
+
+    private void simpanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simpanMouseClicked
+        // TODO add your handling code here:
+        String di = id.getText();
+        String user = username.getText();
+        String pw = password.getText();
+        String ptg = petugas.getText();
+        
+        
+        String sql = "insert into kelas(id_petugas,username,password,nama_petugas,level) values('"+di+"','"+user+"','"+pw+"','"+ptg+"')";
+         
+        koneksi konek = new koneksi();
+        if(konek.rubahData(sql)){
+             Status.setText("data berhasil di tambahkan");
+             muatTabel();
+        }else{
+             Status.setText("data gagal di tambahkan");
+        }
+    }//GEN-LAST:event_simpanMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

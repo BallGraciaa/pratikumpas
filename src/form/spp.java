@@ -5,6 +5,12 @@
  */
 package form;
 
+import Lib.koneksi;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Vector;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Administrator
@@ -13,13 +19,36 @@ public class spp extends javax.swing.JInternalFrame {
 
     
     
-    
+     void kosong(){
+    id.setText("");
+    tahun.setText("");
+    nominal.setText("");
+    }
     
     public spp() {
         initComponents();
     }
 
+       private void muatTabel(){
+    DefaultTableModel model = (DefaultTableModel) tabel.getModel();
+    model.getDataVector().removeAllElements();
+    String sql = "select * from spp"; 
+        koneksi konek = new koneksi();
+        ResultSet rs = konek.ambilData(sql);    
+        try {
+            while(rs.next()){
+              Vector baris = new Vector();
+              baris.add(rs.getInt("id_spp"));
+              baris.add(rs.getString("tahun"));
+              baris.add(rs.getString("nominal"));
+              model.addRow(baris);
+            } 
+        } catch (SQLException e) {
+            
+        }
     
+        
+    }
     
     
     
@@ -47,6 +76,7 @@ public class spp extends javax.swing.JInternalFrame {
         simpan = new javax.swing.JButton();
         hapus = new javax.swing.JButton();
         updete = new javax.swing.JButton();
+        Status = new javax.swing.JLabel();
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
         jLabel1.setText("SPP");
@@ -82,6 +112,11 @@ public class spp extends javax.swing.JInternalFrame {
         jLabel5.setText("SPP");
 
         simpan.setText("simpan");
+        simpan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                simpanMouseClicked(evt);
+            }
+        });
 
         hapus.setText("hapus");
 
@@ -153,7 +188,9 @@ public class spp extends javax.swing.JInternalFrame {
                         .addGap(83, 83, 83)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(58, 58, 58)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Status))))
                 .addContainerGap(62, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -163,7 +200,10 @@ public class spp extends javax.swing.JInternalFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(Status))
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(92, Short.MAX_VALUE))
         );
@@ -175,8 +215,26 @@ public class spp extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_nominalActionPerformed
 
+    private void simpanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simpanMouseClicked
+        // TODO add your handling code here:
+        String di = id.getText();
+        String thn = tahun.getText();
+        String nm = nominal.getText();
+        
+        String sql = "insert into kelas(id_spp,tahun,nominal) values('"+di+"','"+thn+"','"+nm+"')";
+         
+        koneksi konek = new koneksi();
+        if(konek.rubahData(sql)){
+             Status.setText("data berhasil di tambahkan");
+             muatTabel();
+        }else{
+             Status.setText("data gagal di tambahkan");
+        }
+    }//GEN-LAST:event_simpanMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Status;
     private javax.swing.JButton hapus;
     private javax.swing.JTextField id;
     private javax.swing.JLabel jLabel1;

@@ -10,5 +10,7 @@ package form;
  * @author Administrator
  */
 class Level {
+
+    static java.util.logging.Level SEVERE;
     
 }
